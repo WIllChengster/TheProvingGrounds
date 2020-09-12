@@ -1,0 +1,13 @@
+.navbar {
+    background-color: #372772;
+    padding: 1rem;
+    font-family: CarterOne;
+}
+
+.navbar > * {
+    margin: 0
+}
+
+.brand {
+    color:#A1E8AF;
+}
