@@ -9,7 +9,7 @@ module.exports = (io) => {
     
 
     nsp.on('connection', socket => {
-        let findInerval;
+        let findInterval;
         console.log(`${socket.id} is connecting to match finder room`)
 
         socket.on('findMatch', (name) => {
