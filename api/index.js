@@ -1,7 +1,23 @@
 const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 5000;
+const bodyParser = require('body-parser');
+const http = require('http');
 
-app.listen(PORT, () => {
+const server = http.createServer(app);
+
+const io = require('socket.io')(server);
+
+const matchFinder = require('./socketio/matchFinder.js')(io);
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+app.post('/matchFinder', (req, res) => {
+    console.log(req.body);
+    res.send(req.body)
+});
+
+server.listen(PORT, () => {
     console.log('API server is listening to:', PORT);
-})
+});
