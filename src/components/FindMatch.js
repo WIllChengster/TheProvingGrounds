@@ -20,28 +20,34 @@ const FindMatch = (props) => {
         
     }, [])
 
-    const handleButton = () => {
+    const handleFindButton = () => {
         socket.emit('findMatch', name)
+    }
+
+    const handleCancelButton = () => {
+        socket.emit('cancelFind', name)
+        setFinding(false);
     }
 
     const handleInput = (e) => {
         setName(e.target.value)
     }
 
-    const lookingForMatchComponent = isFinding ? null : (
+    const lookingForMatchComponent = isFinding ? (
         <div className="lookingForMatch-container" >
             <p>Looking for a match</p>
             <div className="loadingBar" >
                 <div className="loadingBar-mini"></div>
             </div>
+            <button onClick={handleCancelButton} className="cancel-button" >Cancel</button>
         </div>
-    )
+    ) : null;
     
     return (
         <div className="findMatch-container" >
             { lookingForMatchComponent }
             <input value={name} onChange={handleInput} placeholder="name" />
-            <button disabled={isFinding} onClick={handleButton}  className="findMatch-button" >Find match</button>
+            <button disabled={isFinding} onClick={handleFindButton}  className="findMatch-button" >Find match</button>
         </div>
     )
 }

@@ -19,6 +19,7 @@
     border: none;
     color: white;
     margin-top: 2rem;
+    cursor: pointer;
 }
 
 .lookingForMatch-container {
@@ -45,6 +46,16 @@
     animation-name: loading;
     animation-iteration-count: infinite;
     animation-duration: 1s;
+}
+
+.cancel-button{
+    padding: 1rem;
+    background-color: #372772;
+    box-shadow: none;
+    border: none;
+    color: white;
+    margin-top: 2rem;
+    cursor: pointer;
 }
 
 @keyframes loading{

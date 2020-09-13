@@ -6,9 +6,11 @@ module.exports = (io) => {
     
     const nsp = io.of('/matchFinder');
 
+    
+
     nsp.on('connection', socket => {
+        let findInerval;
         console.log(`${socket.id} is connecting to match finder room`)
-        // console.log(socket.handshake.query);
 
         socket.on('findMatch', (name) => {
 
@@ -24,8 +26,22 @@ module.exports = (io) => {
                 connectedPlayers.push(socket.id)
             }
 
-            socket.emit('findingMatch', connectedPlayers)
+            findInterval = setInterval( () => {
+                socket.emit('findingMatch', connectedPlayers)
+            }, 1000 )
 
+
+            
+        })
+
+        socket.on('cancelFind', (name) => {
+            for(let i = 0; i < connectedPlayers.length; i++){
+                if(socket.id === connectedPlayers[i]){
+                    connectedPlayers.splice(i,1);
+                };
+                clearInterval(findInterval);
+                 
+            }
         })
         
     })
