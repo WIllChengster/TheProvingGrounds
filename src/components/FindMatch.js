@@ -11,9 +11,14 @@ const FindMatch = (props) => {
         //open socket io connection on mounting
         const socketCon = io('http://127.0.0.1:5000/matchFinder');
 
-        socketCon.on('findingMatch', (data) => {
+        socketCon.on('findingMatch', data => {
             console.log(data);
             setFinding(true);
+        })
+
+        socketCon.on('matchFound', data => {
+            console.log(data);
+            setFinding(false);
         })
 
         setSocket(socketCon);

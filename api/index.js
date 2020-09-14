@@ -8,7 +8,9 @@ const server = http.createServer(app);
 
 const io = require('socket.io')(server);
 
-const matchFinder = require('./socketio/matchFinder.js')(io);
+const { matchFinderNamespace } = require('./socketio/matchFinder.js');
+
+matchFinderNamespace(io);
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());

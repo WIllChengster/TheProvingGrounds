@@ -1,47 +1,38 @@
 //this file will have all the relating logic for sockets regarding matchfinding
-
-const connectedPlayers = []
-
-module.exports = (io) => {
+exports.matchFinderNamespace = (io) => {
     
     const nsp = io.of('/matchFinder');
 
-    
+
+
+    let matchFindingInterval = setInterval( () => {
+        let searchingRoom = nsp.adapter.rooms['searching']
+        let players = {};
+        if(searchingRoom !== undefined){
+            players = searchingRoom.sockets
+        }
+        nsp.to('searching').emit('findingMatch', players);
+
+        console.log('firing find-match-emit');
+    }, 1000)
+
+
 
     nsp.on('connection', socket => {
-        let findInterval;
         console.log(`${socket.id} is connecting to match finder room`)
 
         socket.on('findMatch', (name) => {
 
-            //check if socket/player is connectedPlayers Arr, if not then push into array
-            let isPlayerInArr = false;
-            for(let i = 0; i < connectedPlayers.length; i++){
-                if(socket.id === connectedPlayers[i]){
-                    isPlayerInArr = true;
-                };
-                 
-            }
-            if(!isPlayerInArr){
-                connectedPlayers.push(socket.id)
-            }
+            //check if socket/player is connectedPlayers Arr
 
-            findInterval = setInterval( () => {
-                socket.emit('findingMatch', connectedPlayers)
-            }, 1000 )
-
+            //push player into searching room and add them to connectPlayers object
+                socket.join('searching')
 
             
         })
 
         socket.on('cancelFind', (name) => {
-            for(let i = 0; i < connectedPlayers.length; i++){
-                if(socket.id === connectedPlayers[i]){
-                    connectedPlayers.splice(i,1);
-                };
-                clearInterval(findInterval);
-                 
-            }
+            socket.leave('searching')
         })
         
     })
