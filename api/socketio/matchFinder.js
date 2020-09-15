@@ -10,11 +10,31 @@ exports.matchFinderNamespace = (io) => {
         let players = {};
         if(searchingRoom !== undefined){
             players = searchingRoom.sockets
+
+            let player1;
+            let player2;
+            for(let id in players){
+                if(player1 === undefined){
+                    player1 = id.toString();
+                } else {
+                    player2 = id.toString();
+                    break;
+                }
+            }
+            console.log(player1, player2);
+
+            //tell players that match has been found and kick them from searching room
+            if(player1 && player2){
+                nsp.to(player1).emit('matchFound', player2);
+                nsp.to(player2).emit('matchFound', player1)
+                nsp.connected[player1].leave('searching');
+                nsp.connected[player2].leave('searching');
+            }
+
         }
         nsp.to('searching').emit('findingMatch', players);
 
-        console.log('firing find-match-emit');
-    }, 1000)
+    }, 3000)
 
 
 
@@ -22,13 +42,8 @@ exports.matchFinderNamespace = (io) => {
         console.log(`${socket.id} is connecting to match finder room`)
 
         socket.on('findMatch', (name) => {
-
-            //check if socket/player is connectedPlayers Arr
-
             //push player into searching room and add them to connectPlayers object
                 socket.join('searching')
-
-            
         })
 
         socket.on('cancelFind', (name) => {
